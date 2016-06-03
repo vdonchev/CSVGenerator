@@ -16,5 +16,6 @@
         public const string DupeFolder = "Duplicate fodler name";
         public const string InvalidFolderPath = "Invalid folder path";
         public const string InvalidFilePath = "Invalid file path";
+        public const string FakeDateNotSet = "Fake date start is not set.";
     }
 }

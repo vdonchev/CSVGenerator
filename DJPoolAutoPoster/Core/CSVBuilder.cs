@@ -6,18 +6,22 @@
     using System.Linq;
     using System.Text;
     using System.Windows.Forms;
+    using Addons;
+    using Addons.Interfaces;
     using Helpers;
     using Interfaces;
     using Models.Interfaces;
 
     public class CsvBuilder : ICsvBuilder
     {
+        private const bool FakeDate = true;
+
         private const string PosterName = "autodj";
         private const string PostType = "post";
         private const string PostStatus = "publish";
         private const string Item = ",{0}";
         private const string ItemStr = ",\"{0}\"";
-        private readonly string outputFilename = 
+        private readonly string outputFilename =
             "Export-" + $"text-{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}";
 
         private readonly StringBuilder output = new StringBuilder();
@@ -27,10 +31,17 @@
             this.PlaylistGenerator = playlistGenerator;
         }
 
+        public IFakeDateGenerator FakeDateGenerator { get; set; }
+
         private IPlaylistGenerator PlaylistGenerator { get; }
 
         public void BuildAndSave(Dictionary<string, IRelease> releases)
         {
+            if (this.FakeDateGenerator != null)
+            {
+                this.FakeDateGenerator.NumberOfReleases = releases.Count;
+            }
+
             this.output.AppendLine(Messages.DefaultCsvHeader);
 
             foreach (var release in releases)
@@ -40,7 +51,7 @@
                 var releaseLinks = release.Value.DownloadLinks;
                 var releaseCategory = release.Value.Category;
                 var releaseTags = string.Join(",", release.Value.Tags);
-                var releasePlayList = 
+                var releasePlayList =
                     SystemHelper.EscapeText(this.PlaylistGenerator.Generate(releasePath));
 
                 // Id
@@ -53,7 +64,19 @@
                 this.output.Append(string.Format(ItemStr, PosterName));
 
                 // Date
-                this.output.Append(string.Format(Item, SystemHelper.FormatDate(DateTime.UtcNow)));
+
+                if (this.FakeDateGenerator != null)
+                {
+                    this.output.Append(
+                        string.Format(
+                            Item, 
+                            SystemHelper.FormatDate(
+                                this.FakeDateGenerator.Next())));
+                }
+                else
+                {
+                    this.output.Append(string.Format(Item, SystemHelper.FormatDate(DateTime.UtcNow)));
+                }
 
                 // Type
                 this.output.Append(string.Format(ItemStr, PostType));
