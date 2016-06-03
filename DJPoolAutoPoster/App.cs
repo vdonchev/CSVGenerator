@@ -58,7 +58,7 @@
                 this.Io.WriteLine("System error: " + ex.Message, IoColors.Red);
             }
 
-            this.Io.WriteLine(Messages.AllDone, IoColors.Green);
+            this.Io.WriteLine(Constants.AllDone, IoColors.Green);
         }
 
         private void ProcessLinks()
@@ -84,7 +84,7 @@
                 var releaseMd5Name = SystemHelper.NameToMd5(releaseName);
                 if (this.releases.ContainsKey(releaseMd5Name))
                 {
-                    throw new InvalidOperationException(Messages.DupeFolder);
+                    throw new InvalidOperationException(Constants.DupeFolder);
                 }
 
                 this.releases[releaseMd5Name] = 
@@ -94,10 +94,10 @@
 
         private void ReadInputs()
         {
-            this.Io.WriteLine(Messages.SelectReleasesFolder);
+            this.Io.WriteLine(Constants.SelectReleasesFolder);
             this.releasesDirectory = SystemHelper.SelectFolder();
 
-            this.Io.WriteLine(Messages.SelectFileWithLinks);
+            this.Io.WriteLine(Constants.SelectFileWithLinks);
             this.linksFile = SystemHelper.SelectFile();
         }
     }

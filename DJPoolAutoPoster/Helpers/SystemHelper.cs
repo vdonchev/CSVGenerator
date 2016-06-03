@@ -15,7 +15,7 @@
             var targetFolder = new FolderBrowserDialog();
             if (targetFolder.ShowDialog() != DialogResult.OK)
             {
-                throw new CsvGeneratorException(Messages.InvalidFolderPath);
+                throw new CsvGeneratorException(Constants.InvalidFolderPath);
             }
 
             return targetFolder.SelectedPath;
@@ -26,7 +26,7 @@
             var targetFolder = new OpenFileDialog();
             if (targetFolder.ShowDialog() != DialogResult.OK)
             {
-                throw new CsvGeneratorException(Messages.InvalidFilePath);
+                throw new CsvGeneratorException(Constants.InvalidFilePath);
             }
 
             return targetFolder.FileName;

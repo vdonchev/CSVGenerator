@@ -10,7 +10,7 @@
     using IO;
     using IO.Interfaces;
 
-    public static class CsvGeneratorMain
+    public static class CsvGenerator
     {
         public static NameValueCollection Settings;
 

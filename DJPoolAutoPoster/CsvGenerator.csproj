@@ -60,14 +60,14 @@
     <Compile Include="Core\Interfaces\IPlaylistGenerator.cs" />
     <Compile Include="Core\StandartPlaylistGenerator.cs" />
     <Compile Include="Exceptions\CsvGeneratorException.cs" />
-    <Compile Include="Helpers\Messages.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\SystemHelper.cs" />
     <Compile Include="Core\Interfaces\IAudioFileReader.cs" />
     <Compile Include="IO\Interfaces\IInputOutput.cs" />
     <Compile Include="Core\Interfaces\ILinkExtractor.cs" />
     <Compile Include="Core\Mp3Reader.cs" />
     <Compile Include="IO\IOColors.cs" />
-    <Compile Include="CsvGeneratorMain.cs" />
+    <Compile Include="CsvGenerator.cs" />
     <Compile Include="App.cs" />
     <Compile Include="IO\ConsoleInOut.cs" />
     <Compile Include="Core\UniversalLinkExtractor.cs" />

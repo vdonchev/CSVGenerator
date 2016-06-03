@@ -12,7 +12,7 @@
 
         public FakeDateGenerator()
         {
-            this.startDate = DateTime.Parse(CsvGeneratorMain.Settings["FakeDatesStart"]);
+            this.startDate = DateTime.Parse(CsvGenerator.Settings["FakeDatesStart"]);
         }
 
         public int NumberOfReleases
@@ -32,7 +32,7 @@
         {
             if (this.startDate == null)
             {
-                throw new CsvGeneratorException(Messages.FakeDateNotSet);
+                throw new CsvGeneratorException(Constants.FakeDateNotSet);
             }
 
             var now = DateTime.UtcNow;
