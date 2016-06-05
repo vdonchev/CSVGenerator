@@ -47,6 +47,7 @@
 
                 this.ProcessLinks();
 
+                this.Io.WriteLine(Constants.Building, IoColors.Blue);
                 this.CsvBuilder.BuildAndSave(this.releases);
             }
             catch (CsvGeneratorException ex)
@@ -59,6 +60,7 @@
             }
 
             this.Io.WriteLine(Constants.AllDone, IoColors.Green);
+            this.Io.ReadLine();
         }
 
         private void ProcessLinks()
@@ -81,7 +83,7 @@
             foreach (var releasePath in allReleasesPaths)
             {
                 var releaseName = SystemHelper.ExtractFolderName(releasePath);
-                var releaseMd5Name = SystemHelper.NameToMd5(releaseName);
+                var releaseMd5Name = SystemHelper.ToAlphaNumberc(releaseName);
                 if (this.releases.ContainsKey(releaseMd5Name))
                 {
                     throw new InvalidOperationException(Constants.DupeFolder);

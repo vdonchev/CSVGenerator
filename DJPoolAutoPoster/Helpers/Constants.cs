@@ -5,7 +5,8 @@
         // Messages
         public const string SelectReleasesFolder = "Select releases folder";
         public const string SelectFileWithLinks = "Select links file";
-        public const string AllDone = "All done!";
+        public const string AllDone = "All done! - Press any key to continue!";
+        public const string Building = "Building csv...";
 
         // App specific
         public const string CsvFileSignature = "Comma separated values file (.csv)|*.csv";

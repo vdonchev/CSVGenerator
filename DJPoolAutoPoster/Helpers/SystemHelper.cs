@@ -3,6 +3,7 @@
     using System;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
     using System.Windows.Forms;
@@ -44,6 +45,20 @@
                .ToLower();
 
             return md5;
+        }
+
+        public static string ToAlphaNumberc(string text)
+        {
+            var res = new string(
+                text
+                    .Where(ch => char.IsLetterOrDigit(ch) ||
+                                 char.IsWhiteSpace(ch) ||
+                                 ch == '_' ||
+                                 ch == '-').ToArray());
+
+            res = res.Replace(' ', '_').ToLower();
+
+            return res;
         }
 
         public static string ExtractFolderName(string path)

@@ -16,6 +16,7 @@
         private readonly string postType = CsvGenerator.Settings["PostType"];
         private readonly string postStatus = CsvGenerator.Settings["PostStatus"];
         private readonly string websiteUrl = CsvGenerator.Settings["WebsiteUrl"];
+        private readonly int freeFrequency = int.Parse(CsvGenerator.Settings["FreeReleasesFrequency"]);
 
         private readonly StringBuilder output = new StringBuilder();
 
@@ -37,13 +38,25 @@
 
             this.output.AppendLine(Constants.DefaultCsvHeader);
 
+            var releaseIndex = 0;
             foreach (var release in releases)
             {
+                releaseIndex++;
+
                 var releaseName = SystemHelper.EscapeText(release.Value.Name);
                 var releasePath = release.Value.Path;
                 var releaseLinks = release.Value.DownloadLinks;
                 var releaseCategory = release.Value.Category;
+
+                if (this.freeFrequency > 0)
+                {
+                    if (releaseIndex % this.freeFrequency == 0)
+                    {
+                        release.Value.Tags.Add("free");
+                    }
+                }
                 var releaseTags = string.Join(",", release.Value.Tags);
+
                 var releasePlayList =
                     SystemHelper.EscapeText(this.PlaylistGenerator.Generate(releasePath));
 
