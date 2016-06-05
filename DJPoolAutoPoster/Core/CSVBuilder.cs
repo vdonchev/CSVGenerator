@@ -91,7 +91,14 @@
                 this.output.Append(string.Format(Constants.ItemStr, releaseName));
 
                 // Content
-                this.output.Append(string.Format(Constants.ItemStr, releasePlayList));
+                if (releasePlayList == string.Empty)
+                {
+                    this.output.Append(string.Format(Constants.ItemStr, "No Playlist available."));
+                }
+                else
+                {
+                    this.output.Append(string.Format(Constants.ItemStr, releasePlayList));
+                }
 
                 // Category
                 this.output.Append(string.Format(Constants.ItemStr, releaseCategory));

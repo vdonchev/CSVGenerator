@@ -42,7 +42,7 @@
                 .ComputeHash(encodedPassword);
 
             var md5 = BitConverter.ToString(hash)
-               .Replace("-", String.Empty)
+               .Replace("-", string.Empty)
                .ToLower();
 
             return md5;
@@ -52,8 +52,8 @@
         {
             var res = new string(
                 text
-                    .Where(ch => Char.IsLetterOrDigit(ch) ||
-                                 Char.IsWhiteSpace(ch) ||
+                    .Where(ch => char.IsLetterOrDigit(ch) ||
+                                 char.IsWhiteSpace(ch) ||
                                  ch == '_' ||
                                  ch == '-').ToArray());
 

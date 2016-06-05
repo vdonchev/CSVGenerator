@@ -27,10 +27,11 @@
                 {
                     result.AppendLine($"{cleanFileName} ({duration})");
                 }
-                else
-                {
-                    result.AppendLine($"{cleanFileName}");
-                }
+                // Do not include NON-MP3 files
+//                else
+//                {
+//                    result.AppendLine($"{cleanFileName}");
+//                }
             }
 
             return result.ToString().Trim();
