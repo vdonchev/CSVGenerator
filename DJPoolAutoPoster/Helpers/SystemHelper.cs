@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Windows.Forms;
     using Exceptions;
 
@@ -82,23 +83,28 @@
         {
             var releaseFolderName = SystemHelper.ExtractFolderName(releasePath);
 
-            var indexOfNameEnd = releaseFolderName
-                .ToLower()
-                .Replace(" vol", "<")
-                .Replace(" pack ", "<")
-                .IndexOfAny(new[] { '<', '(', '[' });
+            var work = releaseFolderName.ToLower();
+
+            work = Regex.Replace(work, @"va|v.a.", "", RegexOptions.IgnoreCase);
+            work = Regex.Replace(work, @"vol(\s|-|_)|pack(\s|-|_)|\d+|\<|\(|\[", "<");
+            work = work.Trim('-', '_', ' ');
+
+            var indexOfNameEnd = work
+                .IndexOfAny(new[] { '<', '(', '[', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
 
             indexOfNameEnd = indexOfNameEnd < 0
                 ? releaseFolderName.Length - 1
                 : indexOfNameEnd;
 
-            var category = releaseFolderName.Substring(0, indexOfNameEnd);
-            if (category == String.Empty)
+            var category = work.Substring(0, indexOfNameEnd);
+            if (category == string.Empty)
             {
                 category = "Other";
             }
 
-            return category;
+            var textInfo = new CultureInfo("en-US", false).TextInfo;
+
+            return textInfo.ToTitleCase(category.Trim('-', '_', ' '));
         }
     }
 }

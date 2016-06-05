@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.IO;
     using Core.Interfaces;
     using Exceptions;
@@ -19,22 +18,19 @@
 
         private string sourceDirectory;
         private string linksFile;
+        private readonly IInputOutput io;
+        private readonly ILinkExtractor linkExtractor;
+        private readonly ICsvBuilder csvBuilder;
 
         public App(
             IInputOutput io,
             ILinkExtractor linkExtractor,
             ICsvBuilder csvBuilder)
         {
-            this.Io = io;
-            this.LinkExtractor = linkExtractor;
-            this.CsvBuilder = csvBuilder;
+            this.io = io;
+            this.linkExtractor = linkExtractor;
+            this.csvBuilder = csvBuilder;
         }
-
-        public IInputOutput Io { get; private set; }
-
-        public ILinkExtractor LinkExtractor { get; private set; }
-
-        public ICsvBuilder CsvBuilder { get; private set; }
 
         public void Run()
         {
@@ -42,28 +38,28 @@
             {
                 this.ReadInputs();
 
-                this.extractedLinks = this.LinkExtractor.ExtractLinks(this.linksFile);
+                this.extractedLinks = this.linkExtractor.ExtractLinks(this.linksFile);
 
                 this.ProcessReleaseFolders();
 
                 this.ProcessLinks();
 
-                this.Io.WriteLine(Constants.Building, IoColors.Blue);
-                this.CsvBuilder.BuildAndSave(this.releases);
+                this.io.WriteLine(Constants.Building, IoColors.Blue);
+                this.csvBuilder.BuildAndSave(this.releases);
             }
             catch (CsvGeneratorException ex)
             {
-                this.Io.WriteLine(ex.Message, IoColors.Red);
+                this.io.WriteLine(ex.Message, IoColors.Red);
                 Environment.Exit(0);
             }
             catch (Exception ex)
             {
-                this.Io.WriteLine("System error: " + ex.Message, IoColors.Red);
+                this.io.WriteLine("System error: " + ex.Message, IoColors.Red);
                 Environment.Exit(0);
             }
 
-            this.Io.WriteLine(Constants.AllDone, IoColors.Green);
-            this.Io.ReadLine();
+            this.io.WriteLine(Constants.AllDone, IoColors.Green);
+            this.io.ReadLine();
         }
 
         private void ProcessLinks()
@@ -111,10 +107,10 @@
 
         private void ReadInputs()
         {
-            this.Io.WriteLine(Constants.SelectReleasesFolder);
+            this.io.WriteLine(Constants.SelectReleasesFolder);
             this.sourceDirectory = SystemHelper.SelectFolder();
 
-            this.Io.WriteLine(Constants.SelectFileWithLinks);
+            this.io.WriteLine(Constants.SelectFileWithLinks);
             this.linksFile = SystemHelper.SelectFile();
         }
     }
