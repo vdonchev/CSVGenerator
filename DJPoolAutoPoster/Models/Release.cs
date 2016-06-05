@@ -64,7 +64,7 @@
                 .Split(separators, StringSplitOptions.RemoveEmptyEntries)
                 .Where(t => !Regex.IsMatch(t, @"^\d+$"))
                 .Select(t => t.ToLower())
-                .Where(lt => !banned.Contains(lt))
+                .Where(lt => !banned.Contains(lt) && lt.Length > 2)
                 .ToList();
         }
     }
