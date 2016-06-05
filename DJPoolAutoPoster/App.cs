@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.IO;
     using Core.Interfaces;
     using Exceptions;
@@ -16,12 +17,12 @@
         private Dictionary<string, IRelease> releases;
         private Dictionary<string, List<string>> extractedLinks;
 
-        private string releasesDirectory;
+        private string sourceDirectory;
         private string linksFile;
 
         public App(
-            IInputOutput io, 
-            ILinkExtractor linkExtractor, 
+            IInputOutput io,
+            ILinkExtractor linkExtractor,
             ICsvBuilder csvBuilder)
         {
             this.Io = io;
@@ -53,10 +54,12 @@
             catch (CsvGeneratorException ex)
             {
                 this.Io.WriteLine(ex.Message, IoColors.Red);
+                Environment.Exit(0);
             }
             catch (Exception ex)
             {
                 this.Io.WriteLine("System error: " + ex.Message, IoColors.Red);
+                Environment.Exit(0);
             }
 
             this.Io.WriteLine(Constants.AllDone, IoColors.Green);
@@ -79,7 +82,7 @@
         private void ProcessReleaseFolders()
         {
             this.releases = new Dictionary<string, IRelease>();
-            var allReleasesPaths = Directory.GetDirectories(this.releasesDirectory);
+            var allReleasesPaths = Directory.GetDirectories(this.sourceDirectory);
             foreach (var releasePath in allReleasesPaths)
             {
                 var releaseName = SystemHelper.ExtractFolderName(releasePath);
@@ -89,15 +92,27 @@
                     throw new InvalidOperationException(Constants.DupeFolder);
                 }
 
-                this.releases[releaseMd5Name] = 
-                    new Release(releaseName, releasePath, SystemHelper.ExtractFolderName(this.releasesDirectory));
+
+                var categoryName = SystemHelper.ExtractFolderName(this.sourceDirectory);
+                if (bool.Parse(CsvGenerator.Settings["ExtractCatFromRelease"]))
+                {
+                    categoryName = SystemHelper.ExtractCategoryFromRelease(releasePath);
+                }
+
+                this.releases[releaseMd5Name] =
+                    new Release(
+                        releaseName,
+                        releasePath,
+                        categoryName);
             }
         }
+
+        
 
         private void ReadInputs()
         {
             this.Io.WriteLine(Constants.SelectReleasesFolder);
-            this.releasesDirectory = SystemHelper.SelectFolder();
+            this.sourceDirectory = SystemHelper.SelectFolder();
 
             this.Io.WriteLine(Constants.SelectFileWithLinks);
             this.linksFile = SystemHelper.SelectFile();

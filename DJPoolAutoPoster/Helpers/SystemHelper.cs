@@ -41,7 +41,7 @@
                 .ComputeHash(encodedPassword);
 
             var md5 = BitConverter.ToString(hash)
-               .Replace("-", string.Empty)
+               .Replace("-", String.Empty)
                .ToLower();
 
             return md5;
@@ -51,8 +51,8 @@
         {
             var res = new string(
                 text
-                    .Where(ch => char.IsLetterOrDigit(ch) ||
-                                 char.IsWhiteSpace(ch) ||
+                    .Where(ch => Char.IsLetterOrDigit(ch) ||
+                                 Char.IsWhiteSpace(ch) ||
                                  ch == '_' ||
                                  ch == '-').ToArray());
 
@@ -76,6 +76,29 @@
         public static string FormatDate(DateTime date)
         {
             return date.ToString("yyyy/MM/dd HH:mm", CultureInfo.InvariantCulture);
+        }
+
+        public static string ExtractCategoryFromRelease(string releasePath)
+        {
+            var releaseFolderName = SystemHelper.ExtractFolderName(releasePath);
+
+            var indexOfNameEnd = releaseFolderName
+                .ToLower()
+                .Replace(" vol", "<")
+                .Replace(" pack ", "<")
+                .IndexOfAny(new[] { '<', '(', '[' });
+
+            indexOfNameEnd = indexOfNameEnd < 0
+                ? releaseFolderName.Length - 1
+                : indexOfNameEnd;
+
+            var category = releaseFolderName.Substring(0, indexOfNameEnd);
+            if (category == String.Empty)
+            {
+                category = "Other";
+            }
+
+            return category;
         }
     }
 }
