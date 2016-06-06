@@ -86,7 +86,7 @@
             var work = releaseFolderName.ToLower();
 
             work = Regex.Replace(work, @"va|v.a.", "", RegexOptions.IgnoreCase);
-            work = Regex.Replace(work, @"vol(\s|-|_)|pack(\s|-|_)|\d+|\<|\(|\[", "<");
+            work = Regex.Replace(work, @"vol(\s|-|_|\.)|pack(\s|-|_)|\d+|\<|\(|\[", "<");
             work = work.Replace("-", "<");
             work = work.Trim('-', '_', ' ');
 

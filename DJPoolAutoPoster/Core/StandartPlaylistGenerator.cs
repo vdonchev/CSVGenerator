@@ -16,8 +16,13 @@
         public string Generate(string releasePath)
         {
             var result = new StringBuilder();
+            this.ReadPath(releasePath, result);
+            return result.ToString().Trim();
+        }
 
-            var files = Directory.GetFiles(releasePath);
+        private void ReadPath(string path, StringBuilder result)
+        {
+            var files = Directory.GetFiles(path);
             foreach (var file in files)
             {
                 var cleanFileName = Path.GetFileNameWithoutExtension(file);
@@ -27,14 +32,13 @@
                 {
                     result.AppendLine($"{cleanFileName} ({duration})");
                 }
-                // Do not include NON-MP3 files
-//                else
-//                {
-//                    result.AppendLine($"{cleanFileName}");
-//                }
             }
 
-            return result.ToString().Trim();
+            var subFolders = Directory.GetDirectories(path);
+            foreach (var subFolder in subFolders)
+            {
+                this.ReadPath(subFolder, result);
+            }
         }
     }
 }
