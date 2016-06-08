@@ -55,7 +55,7 @@
             catch (Exception ex)
             {
                 this.io.WriteLine("System error: " + ex.Message, IoColors.Red);
-                Environment.Exit(0);
+                throw;
             }
 
             this.io.WriteLine(Constants.AllDone, IoColors.Green);
@@ -83,11 +83,6 @@
             {
                 var releaseName = SystemHelper.ExtractFolderName(releasePath);
                 var releaseMd5Name = SystemHelper.ToAlphaNumberc(releaseName);
-                if (this.releases.ContainsKey(releaseMd5Name))
-                {
-                    throw new InvalidOperationException(Constants.DupeFolder);
-                }
-
 
                 var categoryName = SystemHelper.ExtractFolderName(this.sourceDirectory);
                 if (bool.Parse(CsvGenerator.Settings["ExtractCatFromRelease"]))
@@ -102,9 +97,7 @@
                         categoryName);
             }
         }
-
         
-
         private void ReadInputs()
         {
             this.io.WriteLine(Constants.SelectReleasesFolder);

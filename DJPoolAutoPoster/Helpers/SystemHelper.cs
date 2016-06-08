@@ -81,14 +81,15 @@
 
         public static string ExtractCategoryFromRelease(string releasePath)
         {
+
             var releaseFolderName = SystemHelper.ExtractFolderName(releasePath);
 
             var work = releaseFolderName.ToLower();
 
             work = Regex.Replace(work, @"va|v.a.", "", RegexOptions.IgnoreCase);
             work = Regex.Replace(work, @"vol(\s|-|_|\.)|pack(\s|-|_)|\d+|\<|\(|\[", "<");
-            work = work.Replace("-", "<");
             work = work.Trim('-', '_', ' ');
+            work = work.Replace("-", "<");
 
             var indexOfNameEnd = work
                 .IndexOfAny(new[] { '<', '(', '[', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
@@ -104,8 +105,9 @@
             }
 
             var textInfo = new CultureInfo("en-US", false).TextInfo;
-
+            
             return textInfo.ToTitleCase(category.Trim('-', '_', ' '));
+
         }
     }
 }
