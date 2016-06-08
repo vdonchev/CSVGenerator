@@ -90,6 +90,7 @@
             work = Regex.Replace(work, @"vol(\s|-|_|\.)|pack(\s|-|_)|\d+|\<|\(|\[", "<");
             work = work.Trim('-', '_', ' ');
             work = work.Replace("-", "<");
+            work = work.Replace("_", "");
 
             var indexOfNameEnd = work
                 .IndexOfAny(new[] { '<', '(', '[', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
