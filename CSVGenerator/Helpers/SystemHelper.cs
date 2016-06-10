@@ -15,6 +15,7 @@
         public static string SelectFolder()
         {
             var targetFolder = new FolderBrowserDialog();
+            
             if (targetFolder.ShowDialog() != DialogResult.OK)
             {
                 throw new CsvGeneratorException(Constants.InvalidFolderPath);
@@ -90,7 +91,7 @@
             work = Regex.Replace(work, @"vol(\s|-|_|\.)|pack(\s|-|_)|\d+|\<|\(|\[", "<");
             work = work.Trim('-', '_', ' ');
             work = work.Replace("-", "<");
-            work = work.Replace("_", "");
+            work = work.Replace("_", " ");
 
             var indexOfNameEnd = work
                 .IndexOfAny(new[] { '<', '(', '[', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });

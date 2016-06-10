@@ -43,7 +43,7 @@
             {
                 releaseIndex++;
 
-                var releaseName = SystemHelper.EscapeText(release.Value.Name);
+                var releaseName = SystemHelper.RemoveUnderscore(SystemHelper.EscapeText(release.Value.Name));
                 var releasePath = release.Value.Path;
                 var releaseLinks = release.Value.DownloadLinks;
                 var releaseCategory = release.Value.Category;
