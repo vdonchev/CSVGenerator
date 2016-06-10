@@ -110,5 +110,10 @@
             return textInfo.ToTitleCase(category.Trim('-', '_', ' '));
 
         }
+
+        public static string RemoveUnderscore(string text)
+        {
+            return Regex.Replace(text, @"_+", " ");
+        }
     }
 }

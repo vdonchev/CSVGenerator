@@ -8,11 +8,21 @@
     public class FakeDateGenerator : IFakeDateGenerator
     {
         private DateTime? startDate;
+        private DateTime? endDate;
         private int numberOfReleases;
 
         public FakeDateGenerator()
         {
             this.startDate = DateTime.Parse(CsvGenerator.Settings["FakeDatesStart"]);
+
+            if (CsvGenerator.Settings["FakeDatesStart"] == "now")
+            {
+                this.endDate = DateTime.UtcNow;
+            }
+            else
+            {
+                this.endDate = DateTime.Parse(CsvGenerator.Settings["FakeDatesEnd"]);
+            }
         }
 
         public int NumberOfReleases
@@ -35,10 +45,14 @@
                 throw new CsvGeneratorException(Constants.FakeDateNotSet);
             }
 
-            var now = DateTime.UtcNow;
+            if (this.endDate == null)
+            {
+                throw new CsvGeneratorException(Constants.FakeDateNotSet);
+            }
+            
             var start = this.startDate.Value;
 
-            var secAvail = (long)(now - start).TotalMinutes / this.numberOfReleases;
+            var secAvail = (long)(this.endDate.Value - start).TotalMinutes / this.numberOfReleases;
             var next = start;
             next = next.AddMinutes(secAvail);
 
