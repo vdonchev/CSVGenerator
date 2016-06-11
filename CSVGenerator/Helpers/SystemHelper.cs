@@ -82,10 +82,19 @@
 
         public static string ExtractCategoryFromRelease(string releasePath)
         {
-
             var releaseFolderName = SystemHelper.ExtractFolderName(releasePath);
 
             var work = releaseFolderName.ToLower();
+
+            // Check if release is in predefined categories
+            var predefinedCats = CsvGenerator.Settings["PredefinedCategories"].Split(';');
+            foreach (var pre in predefinedCats)
+            {
+                if (work.Contains(pre.ToLower()))
+                {
+                    return pre;
+                }
+            }
 
             work = Regex.Replace(work, @"va|v.a.", "", RegexOptions.IgnoreCase);
             work = Regex.Replace(work, @"vol(\s|-|_|\.)|pack(\s|-|_)|\d+|\<|\(|\[", "<");
@@ -109,7 +118,6 @@
             var textInfo = new CultureInfo("en-US", false).TextInfo;
             
             return textInfo.ToTitleCase(category.Trim('-', '_', ' '));
-
         }
 
         public static string RemoveUnderscore(string text)
